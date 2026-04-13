@@ -37,10 +37,19 @@ const db = mysql.createConnection({
 
 db.connect((err) => {
     if (err) {
-        console.error('Ошибка подключения к БД:', err);
+        console.error('❌ ОШИБКА ПОДКЛЮЧЕНИЯ К БД:', err);
         return;
     }
-    console.log('Подключено к MySQL');
+    console.log('✅ Подключено к MySQL');
+    
+    // Тестовый запрос к БД
+    db.query('SELECT 1', (err, result) => {
+        if (err) {
+            console.error('❌ Ошибка тестового запроса:', err);
+        } else {
+            console.log('✅ Тестовый запрос к БД успешен');
+        }
+    });
 });
 
 // Middleware
