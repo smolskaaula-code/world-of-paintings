@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - World of Paintings</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <main>
+        <div class="container">
+            <div class="form-container">
+                <h1>Вход</h1>
+                <% if (error) { %>
+                    <div class="error"><%= error %></div>
+                <% } %>
+                <form method="POST" action="/login">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Пароль</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button type="submit">Войти</button>
+                </form>
+                <p>Нет аккаунта? <a href="/register">Зарегистрироваться</a></p>
+            </div>
+        </div>
+    </main>
+    
+    <%- include('partials/footer') %>
+</body>
+</html>

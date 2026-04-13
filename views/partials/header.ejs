@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title><%= typeof title !== 'undefined' ? title : 'World of Paintings' %></title>
+    <link rel="stylesheet" href="/css/style.css" id="themeStylesheet">
+</head>
+<body>
+    <header style="background: #1a1a2e; padding: 15px 0; color: white;">
+        <div class="container">
+            <!-- Название сайта и кнопки -->
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 2rem;">🎨</span>
+                    <h1 style="margin: 0; font-size: 1.5rem;">World of Paintings</h1>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button id="themeToggle" style="background: #f39c12; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">🌙 Тема</button>
+                    <% if (user && user.role === 'admin') { %>
+                        <a href="/admin" style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;">⚙️ Админ</a>
+                    <% } %>
+                </div>
+            </div>
+            
+            <!-- МЕНЮ -->
+            <div style="margin-top: 20px; border-top: 1px solid #444; padding-top: 15px;">
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+                    <a href="/" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Главная</a>
+                    <a href="/gallery" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Галерея</a>
+                    <a href="/paintings" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Картины</a>
+                    <a href="/artists" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Художники</a>
+                    <a href="/forum" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Форум</a>
+                    <a href="/news" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Новости</a>
+                    <a href="/contact" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Контакты</a>
+                    <% if (user) { %>
+                        <a href="/cabinet" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Кабинет</a>
+                        <a href="/logout" style="color: white; text-decoration: none; padding: 8px 12px; background: #e74c3c; border-radius: 5px;">Выйти</a>
+                    <% } else { %>
+                        <a href="/login" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Вход</a>
+                        <a href="/register" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Регистрация</a>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </header>
+    <main>
+
+<script>
+    (function() {
+        // Получаем элементы
+        const themeToggle = document.getElementById('themeToggle');
+        let themeStylesheet = document.getElementById('themeStylesheet');
+        
+        // Если нет второй таблицы стилей, создаём её
+        if (!themeStylesheet) {
+            themeStylesheet = document.createElement('link');
+            themeStylesheet.id = 'themeStylesheet';
+            themeStylesheet.rel = 'stylesheet';
+            document.head.appendChild(themeStylesheet);
+        }
+        
+        // Загружаем сохранённую тему
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme === 'dark') {
+            themeStylesheet.href = '/css/dark-theme.css';
+            themeToggle.textContent = '☀️ Тема';
+        } else {
+            themeStylesheet.href = '/css/style.css';
+            themeToggle.textContent = '🌙 Тема';
+        }
+        
+        // Обработчик переключения
+        themeToggle.addEventListener('click', () => {
+            if (themeStylesheet.href.includes('dark-theme.css')) {
+                themeStylesheet.href = '/css/style.css';
+                themeToggle.textContent = '🌙 Тема';
+                localStorage.setItem('theme', 'light');
+            } else {
+                themeStylesheet.href = '/css/dark-theme.css';
+                themeToggle.textContent = '☀️ Тема';
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    })();
+</script>

@@ -1,0 +1,37 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <h1>Наши художники</h1>
+        
+        <% if (artists && artists.length > 0) { %>
+            <div class="painting-grid">
+                <% artists.forEach(artist => { %>
+                    <div class="painting-card">
+                        <div class="painting-info">
+                            <h3><%= artist.username %></h3>
+                            
+                            <% if (artist.country) { %>
+                                <p><strong>Страна:</strong> <%= artist.country %></p>
+                            <% } %>
+                            
+                            <% if (artist.birth_year) { %>
+                                <p><strong>Год рождения:</strong> <%= artist.birth_year %></p>
+                            <% } %>
+                            
+                            <% if (artist.bio) { %>
+                                <p><%= artist.bio.substring(0, 150) %>...</p>
+                            <% } %>
+                            
+                            <small>На сайте с: <%= new Date(artist.created_at).toLocaleDateString('ru-RU') %></small>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>Пока нет зарегистрированных художников. Будьте первым!</p>
+        <% } %>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

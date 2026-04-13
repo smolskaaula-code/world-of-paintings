@@ -1,0 +1,50 @@
+<%- include('partials/header') %>
+
+<div class="container">
+    <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+        <div style="flex: 1;">
+            <img src="<%= painting.image_url || '/images/placeholder.jpg' %>" style="width: 100%; border-radius: 10px;">
+        </div>
+        <div style="flex: 1;">
+            <h1><%= painting.title %></h1>
+            <p><strong>Художник:</strong> <%= painting.artist || 'Неизвестен' %></p>
+            <% if (painting.year) { %>
+                <p><strong>Год создания:</strong> <%= painting.year %></p>
+            <% } %>
+            <p><strong>Стиль:</strong> <%= painting.style || '-' %></p>
+            <p><strong>Техника:</strong> <%= painting.technique || '-' %></p>
+            <p><strong>Настроение:</strong> <%= painting.mood || '-' %></p>
+            <p><strong>Описание:</strong> <%= painting.description || 'Описание отсутствует' %></p>
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <span>👁️ Просмотров: <span id="views-count"><%= painting.views || 0 %></span></span>
+                <span>❤️ Лайков: <span id="likes-count"><%= painting.likes || 0 %></span></span>
+                <button onclick="likePainting()" style="background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">👍 Нравится</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Увеличиваем счётчик просмотров при загрузке страницы
+    fetch('/painting/<%= painting.id %>/view', { method: 'POST' })
+        .then(() => {
+            // Обновляем отображение просмотров
+            const viewsSpan = document.getElementById('views-count');
+            if (viewsSpan) {
+                let currentViews = parseInt(viewsSpan.innerText);
+                viewsSpan.innerText = currentViews + 1;
+            }
+        });
+    
+    function likePainting() {
+        fetch('/painting/<%= painting.id %>/like', { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('likes-count').innerText = data.likes;
+                }
+            });
+    }
+</script>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обратная связь - World of Paintings</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <main>
+        <div class="container">
+            <h1>Обратная связь</h1>
+            
+            <% if (message) { %>
+                <div class="success"><%= message %></div>
+            <% } %>
+            
+            <div class="form-container">
+                <form method="POST" action="/contact">
+                    <div class="form-group">
+                        <label>Ваше имя</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ваш Email</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Тема</label>
+                        <input type="text" name="subject">
+                    </div>
+                    <div class="form-group">
+                        <label>Сообщение</label>
+                        <textarea name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit">Отправить</button>
+                </form>
+            </div>
+        </div>
+    </main>
+    
+    <%- include('partials/footer') %>
+</body>
+</html>

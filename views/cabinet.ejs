@@ -1,0 +1,40 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <h1>Личный кабинет</h1>
+        <p>Добро пожаловать, <strong><%= user.username %></strong>!</p>
+        
+        <% if (!user.is_artist) { %>
+            <div class="form-container" style="margin-top: 2rem;">
+                <h3>Стать художником</h3>
+                <p>Заполните информацию о себе, чтобы появиться в списке художников</p>
+                <form method="POST" action="/become-artist">
+                    <div class="form-group">
+                        <label>Страна</label>
+                        <input type="text" name="country">
+                    </div>
+                    <div class="form-group">
+                        <label>Год рождения</label>
+                        <input type="number" name="birth_year">
+                    </div>
+                    <div class="form-group">
+                        <label>О себе (биография)</label>
+                        <textarea name="bio" rows="4"></textarea>
+                    </div>
+                    <button type="submit">Стать художником</button>
+                </form>
+            </div>
+        <% } else { %>
+            <div class="success" style="margin-top: 2rem; padding: 1rem; background: #e8f8f5;">
+                ✓ Вы зарегистрированы как художник
+            </div>
+        <% } %>
+        
+        <div style="margin-top: 2rem;">
+            <a href="/add-painting" class="btn-primary">➕ Добавить картину</a>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

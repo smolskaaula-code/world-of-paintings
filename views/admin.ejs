@@ -1,0 +1,338 @@
+<%- include('partials/header') %>
+
+<style>
+    /* Адаптивные стили для админ-панели */
+    .admin-container {
+        padding: 0 15px;
+    }
+    
+    .admin-tabs {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
+        flex-wrap: wrap;
+    }
+    
+    .admin-tab {
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        transition: all 0.3s ease;
+    }
+    
+    .admin-tab:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .tab-users { background: #3498db; }
+    .tab-paintings { background: #e74c3c; }
+    .tab-news { background: #2ecc71; }
+    .tab-contacts { background: #f39c12; }
+    
+    /* Таблицы с горизонтальной прокруткой */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        min-width: 600px;
+    }
+    
+    .admin-table th {
+        background: #2c3e50;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-size: 14px;
+    }
+    
+    .admin-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+        font-size: 14px;
+    }
+    
+    .admin-table tr:hover {
+        background: #f5f5f5;
+    }
+    
+    /* Карточки для картин */
+    .paintings-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+    
+    .painting-admin-card {
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+    }
+    
+    .painting-admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+    
+    .painting-admin-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .painting-admin-card .info {
+        padding: 15px;
+    }
+    
+    .admin-btn {
+        padding: 5px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .admin-btn:hover {
+        transform: scale(1.05);
+    }
+    
+    .admin-btn-danger {
+        background: #e74c3c;
+        color: white;
+    }
+    
+    .admin-btn-danger:hover {
+        background: #c0392b;
+    }
+    
+    .admin-btn-success {
+        background: #2ecc71;
+        color: white;
+    }
+    
+    .admin-input {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    .admin-select {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ddd;
+    }
+    
+    /* МОБИЛЬНАЯ АДАПТАЦИЯ */
+    @media (max-width: 768px) {
+        .admin-tabs {
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .admin-tab {
+            text-align: center;
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+        }
+        
+        .paintings-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .admin-table th,
+        .admin-table td {
+            padding: 8px;
+            font-size: 12px;
+        }
+        
+        .container h1 {
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .container h2 {
+            font-size: 1.3rem;
+            text-align: center;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .admin-table th,
+        .admin-table td {
+            padding: 6px;
+            font-size: 11px;
+        }
+        
+        .admin-btn {
+            padding: 4px 8px;
+            font-size: 11px;
+        }
+        
+        .painting-admin-card .info h3 {
+            font-size: 16px;
+        }
+    }
+</style>
+
+<div class="admin-container">
+    <div class="container">
+        <h1>👑 Панель администратора</h1>
+        
+        <!-- Вкладки -->
+        <div class="admin-tabs">
+            <a href="#users" class="admin-tab tab-users">👥 Пользователи</a>
+            <a href="#paintings" class="admin-tab tab-paintings">🖼️ Картины</a>
+            <a href="#news" class="admin-tab tab-news">📰 Новости</a>
+            <a href="#contacts" class="admin-tab tab-contacts">✉️ Сообщения</a>
+        </div>
+        
+        <!-- ПОЛЬЗОВАТЕЛИ -->
+        <div id="users" style="margin-bottom: 40px;">
+            <h2>👥 Управление пользователями</h2>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Имя</th><th>Email</th><th>Страна</th><th>Год рожд.</th><th>Роль</th><th>Действия</th></tr>
+                    </thead>
+                    <tbody>
+                        <% if (users && users.length > 0) { %>
+                            <% users.forEach(user => { %>
+                                <tr>
+                                    <td><%= user.id %></td>
+                                    <td><%= user.username %></td>
+                                    <td><%= user.email %></td>
+                                    <td><%= user.country || '-' %></td>
+                                    <td><%= user.birth_year || '-' %></td>
+                                    <td>
+                                        <form method="POST" action="/admin/user/role/<%= user.id %>" style="display: inline;">
+                                            <select name="role" class="admin-select" onchange="this.form.submit()">
+                                                <option value="user" <%= user.role === 'user' ? 'selected' : '' %>>Пользователь</option>
+                                                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Администратор</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/admin/user/delete/<%= user.id %>" onsubmit="return confirm('Удалить пользователя?')" style="display: inline;">
+                                            <button type="submit" class="admin-btn admin-btn-danger">🗑</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="7">Нет пользователей</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- КАРТИНЫ -->
+        <div id="paintings" style="margin-bottom: 40px;">
+            <h2>🖼️ Управление картинами</h2>
+            <div class="paintings-grid">
+                <% if (paintings && paintings.length > 0) { %>
+                    <% paintings.forEach(painting => { %>
+                        <div class="painting-admin-card">
+                            <img src="<%= painting.image_url || '/images/placeholder.jpg' %>" alt="<%= painting.title %>">
+                            <div class="info">
+                                <h3><%= painting.title %></h3>
+                                <p><strong>Художник:</strong> <%= painting.artist || '-' %></p>
+                                <p><strong>Стиль:</strong> <%= painting.style || '-' %></p>
+                                <form method="POST" action="/admin/painting/delete/<%= painting.id %>" onsubmit="return confirm('Удалить картину?')">
+                                    <button type="submit" class="admin-btn admin-btn-danger" style="width: 100%;">🗑 Удалить</button>
+                                </form>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } else { %>
+                    <p>Нет картин</p>
+                <% } %>
+            </div>
+        </div>
+        
+        <!-- НОВОСТИ -->
+        <div id="news" style="margin-bottom: 40px;">
+            <h2>📰 Управление новостями</h2>
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
+                <h3>Добавить новость</h3>
+                <form method="POST" action="/admin/news/add">
+                    <input type="text" name="title" placeholder="Заголовок" class="admin-input" required>
+                    <textarea name="content" placeholder="Текст" rows="5" class="admin-input" required></textarea>
+                    <button type="submit" class="admin-btn admin-btn-success">➕ Добавить</button>
+                </form>
+            </div>
+            <% if (news && news.length > 0) { %>
+                <% news.forEach(item => { %>
+                    <div class="painting-admin-card" style="padding: 15px; margin-bottom: 10px;">
+                        <h3><%= item.title %></h3>
+                        <p><%= item.content %></p>
+                        <small><%= new Date(item.created_at).toLocaleString('ru-RU') %></small>
+                        <form method="POST" action="/admin/news/delete/<%= item.id %>" style="margin-top: 10px;">
+                            <button type="submit" class="admin-btn admin-btn-danger">🗑 Удалить</button>
+                        </form>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>Новостей нет</p>
+            <% } %>
+        </div>
+        
+        <!-- СООБЩЕНИЯ -->
+        <div id="contacts">
+            <h2>✉️ Сообщения</h2>
+            <div class="table-wrapper">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>ID</th><th>Имя</th><th>Email</th><th>Сообщение</th><th>Статус</th><th>Действия</th></tr>
+                    </thead>
+                    <tbody>
+                        <% if (contacts && contacts.length > 0) { %>
+                            <% contacts.forEach(contact => { %>
+                                <tr>
+                                    <td><%= contact.id %></td>
+                                    <td><%= contact.name %></td>
+                                    <td><%= contact.email %></td>
+                                    <td><%= contact.message.substring(0, 50) %>...</td>
+                                    <td>
+                                        <form method="POST" action="/admin/contact/status/<%= contact.id %>" style="display: inline;">
+                                            <select name="status" class="admin-select" onchange="this.form.submit()">
+                                                <option value="new" <%= contact.status === 'new' ? 'selected' : '' %>>Новое</option>
+                                                <option value="read" <%= contact.status === 'read' ? 'selected' : '' %>>Прочитано</option>
+                                                <option value="replied" <%= contact.status === 'replied' ? 'selected' : '' %>>Ответили</option>
+                                            </select>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="/admin/contact/delete/<%= contact.id %>" style="display: inline;" onsubmit="return confirm('Удалить сообщение?')">
+                                            <button type="submit" class="admin-btn admin-btn-danger">🗑</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="6">Нет сообщений</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/footer') %>

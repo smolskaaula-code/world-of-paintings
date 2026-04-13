@@ -1,0 +1,90 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <div class="form-container">
+            <h1>Добавить картину</h1>
+            <% if (error) { %>
+                <div class="error"><%= error %></div>
+            <% } %>
+            
+            <form method="POST" action="/add-painting" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Название картины *</label>
+                    <input type="text" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Художник</label>
+                    <input type="text" name="artist">
+                </div>
+                
+                <div class="form-group">
+                    <label>Год создания</label>
+                    <input type="number" name="year">
+                </div>
+                
+                <div class="form-group">
+                    <label>Описание</label>
+                    <textarea name="description" rows="4"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Стиль</label>
+                    <select name="style">
+                        <option value="">Выберите стиль</option>
+                        <option value="Реализм">Реализм</option>
+                        <option value="Импрессионизм">Импрессионизм</option>
+                        <option value="Абстракционизм">Абстракционизм</option>
+                        <option value="Сюрреализм">Сюрреализм</option>
+                        <option value="Классицизм">Классицизм</option>
+                        <option value="Барокко">Барокко</option>
+                        <option value="Ренессанс">Ренессанс</option>
+                        <option value="Модерн">Модерн</option>
+                        <option value="Экспрессионизм">Экспрессионизм</option>
+                        <option value="Кубизм">Кубизм</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Техника</label>
+                    <select name="technique">
+                        <option value="">Выберите технику</option>
+                        <option value="Масло">Масло</option>
+                        <option value="Акварель">Акварель</option>
+                        <option value="Акрил">Акрил</option>
+                        <option value="Гуашь">Гуашь</option>
+                        <option value="Пастель">Пастель</option>
+                        <option value="Карандаш">Карандаш</option>
+                        <option value="Тушь">Тушь</option>
+                        <option value="Цифровая живопись">Цифровая живопись</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Настроение</label>
+                    <select name="mood">
+                        <option value="">Выберите настроение</option>
+                        <option value="Спокойствие">Спокойствие</option>
+                        <option value="Энергия">Энергия</option>
+                        <option value="Меланхолия">Меланхолия</option>
+                        <option value="Радость">Радость</option>
+                        <option value="Таинственность">Таинственность</option>
+                        <option value="Вдохновение">Вдохновение</option>
+                        <option value="Тоска">Тоска</option>
+                        <option value="Романтика">Романтика</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Изображение</label>
+                    <input type="file" name="image" accept="image/*">
+                </div>
+                
+                <button type="submit">Добавить картину</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

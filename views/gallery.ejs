@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <h1>Галерея работ</h1>
+        
+        <!-- Фильтры -->
+        <div class="filters">
+            <h3>Фильтр по категориям</h3>
+            <form method="GET" action="/gallery">
+                <div class="filter-group">
+                    <select name="style">
+                        <option value="">Все стили</option>
+                        <option value="Реализм" <%= filters.style === 'Реализм' ? 'selected' : '' %>>Реализм</option>
+                        <option value="Импрессионизм" <%= filters.style === 'Импрессионизм' ? 'selected' : '' %>>Импрессионизм</option>
+                        <option value="Абстракционизм" <%= filters.style === 'Абстракционизм' ? 'selected' : '' %>>Абстракционизм</option>
+                        <option value="Сюрреализм" <%= filters.style === 'Сюрреализм' ? 'selected' : '' %>>Сюрреализм</option>
+                        <option value="Классицизм" <%= filters.style === 'Классицизм' ? 'selected' : '' %>>Классицизм</option>
+                        <option value="Барокко" <%= filters.style === 'Барокко' ? 'selected' : '' %>>Барокко</option>
+                        <option value="Ренессанс" <%= filters.style === 'Ренессанс' ? 'selected' : '' %>>Ренессанс</option>
+                        <option value="Модерн" <%= filters.style === 'Модерн' ? 'selected' : '' %>>Модерн</option>
+                        <option value="Экспрессионизм" <%= filters.style === 'Экспрессионизм' ? 'selected' : '' %>>Экспрессионизм</option>
+                        <option value="Постимпрессионизм" <%= filters.style === 'Постимпрессионизм' ? 'selected' : '' %>>Постимпрессионизм</option>
+                    </select>
+                    
+                    <select name="technique">
+                        <option value="">Все техники</option>
+                        <option value="Масло" <%= filters.technique === 'Масло' ? 'selected' : '' %>>Масло</option>
+                        <option value="Акварель" <%= filters.technique === 'Акварель' ? 'selected' : '' %>>Акварель</option>
+                        <option value="Акрил" <%= filters.technique === 'Акрил' ? 'selected' : '' %>>Акрил</option>
+                        <option value="Гуашь" <%= filters.technique === 'Гуашь' ? 'selected' : '' %>>Гуашь</option>
+                        <option value="Пастель" <%= filters.technique === 'Пастель' ? 'selected' : '' %>>Пастель</option>
+                        <option value="Карандаш" <%= filters.technique === 'Карандаш' ? 'selected' : '' %>>Карандаш</option>
+                        <option value="Тушь" <%= filters.technique === 'Тушь' ? 'selected' : '' %>>Тушь</option>
+                    </select>
+                    
+                    <select name="mood">
+                        <option value="">Все настроения</option>
+                        <option value="Спокойствие" <%= filters.mood === 'Спокойствие' ? 'selected' : '' %>>Спокойствие</option>
+                        <option value="Энергия" <%= filters.mood === 'Энергия' ? 'selected' : '' %>>Энергия</option>
+                        <option value="Меланхолия" <%= filters.mood === 'Меланхолия' ? 'selected' : '' %>>Меланхолия</option>
+                        <option value="Радость" <%= filters.mood === 'Радость' ? 'selected' : '' %>>Радость</option>
+                        <option value="Таинственность" <%= filters.mood === 'Таинственность' ? 'selected' : '' %>>Таинственность</option>
+                        <option value="Вдохновение" <%= filters.mood === 'Вдохновение' ? 'selected' : '' %>>Вдохновение</option>
+                        <option value="Романтика" <%= filters.mood === 'Романтика' ? 'selected' : '' %>>Романтика</option>
+                        <option value="Тревога" <%= filters.mood === 'Тревога' ? 'selected' : '' %>>Тревога</option>
+                    </select>
+                    
+                    <input type="text" name="artist" placeholder="Поиск по художнику" value="<%= filters.artist || '' %>">
+                    
+                    <button type="submit">🔍 Применить фильтр</button>
+                    <a href="/gallery" class="btn-small">Сбросить</a>
+                </div>
+            </form>
+        </div>
+        
+        <!-- Список картин -->
+        <div class="painting-grid">
+            <% if (paintings && paintings.length > 0) { %>
+                <% paintings.forEach(painting => { %>
+                    <div class="painting-card">
+                        <img src="<%= painting.image_url || '/images/placeholder.jpg' %>" alt="<%= painting.title %>">
+                        <div class="painting-info">
+                            <h3><%= painting.title %></h3>
+                            <p><%= painting.artist || 'Неизвестный художник' %></p>
+                            <p><small><%= painting.style || '' %> <%= painting.year ? painting.year : '' %></small></p>
+                            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                                <span>👁️ <%= painting.views || 0 %></span>
+                                <span>❤️ <%= painting.likes || 0 %></span>
+                            </div>
+                            <a href="/painting/<%= painting.id %>" class="btn-small" style="margin-top: 10px; display: inline-block;">Подробнее</a>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>Пока нет картин в галерее. Добавьте первую!</p>
+            <% } %>
+        </div>
+        
+        <% if (user) { %>
+            <div style="text-align: center; margin-top: 2rem;">
+                <a href="/add-painting" class="btn-primary">➕ Добавить картину</a>
+            </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

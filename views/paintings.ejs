@@ -1,0 +1,112 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <h1>Картины</h1>
+        
+        <% if (paintings && paintings.length > 0) { %>
+            <div class="painting-grid">
+                <% paintings.forEach(painting => { %>
+                    <div class="painting-card" onclick="openModal(<%= painting.id %>, '<%= painting.title %>', '<%= painting.image_url %>', '<%= painting.artist %>', '<%= painting.description %>', <%= painting.views || 0 %>, <%= painting.likes || 0 %>)">
+                        <img src="<%= painting.image_url || '/images/placeholder.jpg' %>" alt="<%= painting.title %>">
+                        <div class="painting-info">
+                            <h3><%= painting.title %></h3>
+                            <p><%= painting.artist || 'Неизвестный художник' %></p>
+                            <% if (painting.year) { %>
+                                <p><small><%= painting.year %></small></p>
+                            <% } %>
+                            <div style="display: flex; gap: 15px; margin-top: 10px;">
+                                <span>👁️ <%= painting.views || 0 %></span>
+                                <span>❤️ <span id="likes-<%= painting.id %>"><%= painting.likes || 0 %></span></span>
+                                <button onclick="event.stopPropagation(); likePainting(<%= painting.id %>)" style="background: none; border: none; cursor: pointer; color: #e74c3c;">👍</button>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        <% } else { %>
+            <p>Пока нет картин. <a href="/add-painting">Добавить первую картину</a></p>
+        <% } %>
+    </div>
+</main>
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+<div id="modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center;">
+    <div style="max-width: 90%; max-height: 90%; background: white; border-radius: 10px; overflow: auto;">
+        <button onclick="closeModal()" style="float: right; background: #e74c3c; color: white; border: none; padding: 10px 20px; cursor: pointer; margin: 10px;">✖ Закрыть</button>
+        <div style="padding: 20px;">
+            <img id="modalImage" src="" style="max-width: 100%; max-height: 60vh; display: block; margin: 0 auto;">
+            <h2 id="modalTitle"></h2>
+            <p id="modalArtist"></p>
+            <p id="modalDescription"></p>
+            <div style="display: flex; gap: 20px; margin-top: 20px;">
+                <span>👁️ Просмотров: <span id="modalViews">0</span></span>
+                <span>❤️ Лайков: <span id="modalLikes">0</span></span>
+                <button onclick="likePaintingFromModal()" style="background: #e74c3c; color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer;">👍 Нравится</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let currentPaintingId = null;
+    
+    // Открыть модальное окно
+    function openModal(id, title, imageUrl, artist, description, views, likes) {
+        currentPaintingId = id;
+        document.getElementById('modalImage').src = imageUrl || '/images/placeholder.jpg';
+        document.getElementById('modalTitle').innerText = title;
+        document.getElementById('modalArtist').innerHTML = `<strong>Художник:</strong> ${artist || 'Неизвестен'}`;
+        document.getElementById('modalDescription').innerHTML = description || 'Описание отсутствует';
+        document.getElementById('modalViews').innerText = views;
+        document.getElementById('modalLikes').innerText = likes;
+        document.getElementById('modal').style.display = 'flex';
+        
+        // Увеличиваем счётчик просмотров
+        fetch(`/painting/${id}/view`, { method: 'POST' })
+            .then(() => {
+                document.getElementById('modalViews').innerText = parseInt(document.getElementById('modalViews').innerText) + 1;
+                // Обновляем просмотры на карточке
+                const card = document.querySelector(`.painting-card`);
+                // Можно обновить, но сложно, поэтому просто оставляем
+            });
+    }
+    
+    // Закрыть модальное окно
+    function closeModal() {
+        document.getElementById('modal').style.display = 'none';
+        currentPaintingId = null;
+    }
+    
+    // Лайк на карточке
+    function likePainting(id) {
+        fetch(`/painting/${id}/like`, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    const likesSpan = document.getElementById(`likes-${id}`);
+                    if (likesSpan) {
+                        likesSpan.innerText = data.likes;
+                    }
+                    // Если модальное окно открыто для этой картины, обновляем и там
+                    if (currentPaintingId === id) {
+                        document.getElementById('modalLikes').innerText = data.likes;
+                    }
+                }
+            });
+    }
+    
+    // Лайк из модального окна
+    function likePaintingFromModal() {
+        if (currentPaintingId) {
+            likePainting(currentPaintingId);
+        }
+    }
+    
+    // Закрытие по Esc
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
+</script>
+
+<%- include('partials/footer') %>

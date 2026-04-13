@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форум - World of Paintings</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    
+    <main>
+        <div class="container">
+            <h1>Форум «Обсуждение и вдохновение»</h1>
+            
+            <% if (user) { %>
+                <div class="form-container">
+                    <h3>Создать новую тему</h3>
+                    <form method="POST" action="/forum/topic">
+                        <div class="form-group">
+                            <input type="text" name="title" placeholder="Название темы" required>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="content" placeholder="Содержание" rows="5" required></textarea>
+                        </div>
+                        <button type="submit">Создать тему</button>
+                    </form>
+                </div>
+            <% } else { %>
+                <div class="form-container">
+                    <p><a href="/login">Войдите</a> или <a href="/register">зарегистрируйтесь</a>, чтобы создать тему</p>
+                </div>
+            <% } %>
+            
+            <h2>Темы форума</h2>
+            <% if (topics && topics.length > 0) { %>
+                <% topics.forEach(topic => { %>
+                    <div class="painting-card">
+                        <div class="painting-info">
+                            <h3><%= topic.title %></h3>
+                            <p><%= topic.content %></p>
+                            <small>Автор: <%= topic.username || 'Гость' %> | <%= new Date(topic.created_at).toLocaleDateString('ru-RU') %></small>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } else { %>
+                <p>Пока нет тем. Будьте первым, кто начнёт обсуждение!</p>
+            <% } %>
+        </div>
+    </main>
+    
+    <%- include('partials/footer') %>
+</body>
+</html>
