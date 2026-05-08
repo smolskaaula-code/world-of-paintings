@@ -7,6 +7,7 @@ const multer = require('multer');
 const fs = require('fs');
 const os = require('os');
 const ExcelJS = require('exceljs'); // ДОБАВЛЕНО для экспорта в Excel
+require('dotenv').config();
 
 const app = express();
 const PORT = 3000;
@@ -27,12 +28,13 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
-// Подключение к MySQL (ЛОКАЛЬНАЯ БАЗА)
+// Подключение к MySQL (из переменных окружения)
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '7803075',
-    database: 'world_paintings'
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 3306,
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD || '7803075',
+    database: process.env.DB_NAME || 'world_paintings'
 });
 
 db.connect((err) => {
@@ -50,7 +52,7 @@ app.use(express.static('public'));
 
 // Настройка сессий
 app.use(session({
-    secret: 'secret-key',
+    secret: process.env.SESSION_SECRET || 'secret-key',
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 3600000 }
