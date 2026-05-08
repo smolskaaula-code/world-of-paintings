@@ -25,10 +25,8 @@
 </div>
 
 <script>
-    // Увеличиваем счётчик просмотров при загрузке страницы
     fetch('/painting/<%= painting.id %>/view', { method: 'POST' })
         .then(() => {
-            // Обновляем отображение просмотров
             const viewsSpan = document.getElementById('views-count');
             if (viewsSpan) {
                 let currentViews = parseInt(viewsSpan.innerText);
