@@ -1,210 +1,24 @@
 <%- include('partials/header') %>
 
-<style>
-    /* Адаптивные стили для админ-панели */
-    .admin-container {
-        padding: 0 15px;
-    }
+<div class="container">
+    <h1>👑 Панель администратора</h1>
+    <p>Добро пожаловать, <strong><%= user.username %></strong>!</p>
     
-    .admin-tabs {
-        display: flex;
-        gap: 10px;
-        margin-bottom: 30px;
-        border-bottom: 2px solid #ddd;
-        padding-bottom: 10px;
-        flex-wrap: wrap;
-    }
+    <!-- Вкладки -->
+    <div class="admin-tabs">
+        <button class="tab-btn active" data-tab="users">👥 Пользователи</button>
+        <button class="tab-btn" data-tab="paintings">🖼️ Картины</button>
+        <button class="tab-btn" data-tab="news">📰 Новости</button>
+        <button class="tab-btn" data-tab="contacts">✉️ Сообщения</button>
+    </div>
     
-    .admin-tab {
-        padding: 10px 20px;
-        background: #3498db;
-        color: white;
-        text-decoration: none;
-        border-radius: 5px;
-        transition: all 0.3s ease;
-    }
-    
-    .admin-tab:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    }
-    
-    .tab-users { background: #3498db; }
-    .tab-paintings { background: #e74c3c; }
-    .tab-news { background: #2ecc71; }
-    .tab-contacts { background: #f39c12; }
-    
-    /* Таблицы с горизонтальной прокруткой */
-    .table-wrapper {
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-    }
-    
-    .admin-table {
-        width: 100%;
-        border-collapse: collapse;
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        min-width: 600px;
-    }
-    
-    .admin-table th {
-        background: #2c3e50;
-        color: white;
-        padding: 12px;
-        text-align: left;
-        font-size: 14px;
-    }
-    
-    .admin-table td {
-        padding: 10px;
-        border-bottom: 1px solid #ddd;
-        font-size: 14px;
-    }
-    
-    .admin-table tr:hover {
-        background: #f5f5f5;
-    }
-    
-    /* Карточки для картин */
-    .paintings-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 20px;
-    }
-    
-    .painting-admin-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-    }
-    
-    .painting-admin-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    }
-    
-    .painting-admin-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-    
-    .painting-admin-card .info {
-        padding: 15px;
-    }
-    
-    .admin-btn {
-        padding: 5px 10px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    
-    .admin-btn:hover {
-        transform: scale(1.05);
-    }
-    
-    .admin-btn-danger {
-        background: #e74c3c;
-        color: white;
-    }
-    
-    .admin-btn-danger:hover {
-        background: #c0392b;
-    }
-    
-    .admin-btn-success {
-        background: #2ecc71;
-        color: white;
-    }
-    
-    .admin-input {
-        padding: 8px 12px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        width: 100%;
-        margin-bottom: 10px;
-    }
-    
-    .admin-select {
-        padding: 5px;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-    }
-    
-    /* МОБИЛЬНАЯ АДАПТАЦИЯ */
-    @media (max-width: 768px) {
-        .admin-tabs {
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .admin-tab {
-            text-align: center;
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-        }
-        
-        .paintings-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .admin-table th,
-        .admin-table td {
-            padding: 8px;
-            font-size: 12px;
-        }
-        
-        .container h1 {
-            font-size: 1.8rem;
-            text-align: center;
-        }
-        
-        .container h2 {
-            font-size: 1.3rem;
-            text-align: center;
-        }
-    }
-    
-    @media (max-width: 480px) {
-        .admin-table th,
-        .admin-table td {
-            padding: 6px;
-            font-size: 11px;
-        }
-        
-        .admin-btn {
-            padding: 4px 8px;
-            font-size: 11px;
-        }
-        
-        .painting-admin-card .info h3 {
-            font-size: 16px;
-        }
-    }
-</style>
-
-<div class="admin-container">
-    <div class="container">
-        <h1>👑 Панель администратора</h1>
-        
-        <!-- Вкладки -->
-        <div class="admin-tabs">
-            <a href="#users" class="admin-tab tab-users">👥 Пользователи</a>
-            <a href="#paintings" class="admin-tab tab-paintings">🖼️ Картины</a>
-            <a href="#news" class="admin-tab tab-news">📰 Новости</a>
-            <a href="#contacts" class="admin-tab tab-contacts">✉️ Сообщения</a>
-        </div>
-        
-        <!-- ПОЛЬЗОВАТЕЛИ -->
-        <div id="users" style="margin-bottom: 40px;">
-            <h2>👥 Управление пользователями</h2>
+    <!-- ============= ПОЛЬЗОВАТЕЛИ ============= -->
+    <div id="tab-users" class="tab-content active">
+        <div class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">👥 Управление пользователями</h2>
+                <a href="/export/users" class="export-btn">📊 Экспорт в Excel</a>
+            </div>
             <div class="table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -229,7 +43,7 @@
                                     </td>
                                     <td>
                                         <form method="POST" action="/admin/user/delete/<%= user.id %>" onsubmit="return confirm('Удалить пользователя?')" style="display: inline;">
-                                            <button type="submit" class="admin-btn admin-btn-danger">🗑</button>
+                                            <button type="submit" class="admin-btn admin-btn-danger">🗑 Удалить</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -241,10 +55,15 @@
                 </table>
             </div>
         </div>
-        
-        <!-- КАРТИНЫ -->
-        <div id="paintings" style="margin-bottom: 40px;">
-            <h2>🖼️ Управление картинами</h2>
+    </div>
+    
+    <!-- ============= КАРТИНЫ ============= -->
+    <div id="tab-paintings" class="tab-content">
+        <div class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">🖼️ Управление картинами</h2>
+                <a href="/export/paintings" class="export-btn">📊 Экспорт в Excel</a>
+            </div>
             <div class="paintings-grid">
                 <% if (paintings && paintings.length > 0) { %>
                     <% paintings.forEach(painting => { %>
@@ -265,37 +84,41 @@
                 <% } %>
             </div>
         </div>
-        
-        <!-- НОВОСТИ -->
-        <div id="news" style="margin-bottom: 40px;">
-            <h2>📰 Управление новостями</h2>
-            <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-                <h3>Добавить новость</h3>
-                <form method="POST" action="/admin/news/add">
-                    <input type="text" name="title" placeholder="Заголовок" class="admin-input" required>
-                    <textarea name="content" placeholder="Текст" rows="5" class="admin-input" required></textarea>
-                    <button type="submit" class="admin-btn admin-btn-success">➕ Добавить</button>
-                </form>
+    </div>
+    
+    <!-- ============= НОВОСТИ ============= -->
+    <div id="tab-news" class="tab-content">
+        <div class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">➕ Добавить новость</h2>
+                <a href="/export/news" class="export-btn">📊 Экспорт в Excel</a>
             </div>
-            <% if (news && news.length > 0) { %>
-                <% news.forEach(item => { %>
-                    <div class="painting-admin-card" style="padding: 15px; margin-bottom: 10px;">
-                        <h3><%= item.title %></h3>
-                        <p><%= item.content %></p>
-                        <small><%= new Date(item.created_at).toLocaleString('ru-RU') %></small>
-                        <form method="POST" action="/admin/news/delete/<%= item.id %>" style="margin-top: 10px;">
-                            <button type="submit" class="admin-btn admin-btn-danger">🗑 Удалить</button>
-                        </form>
-                    </div>
-                <% }) %>
-            <% } else { %>
-                <p>Новостей нет</p>
-            <% } %>
+            <form method="POST" action="/admin/news/add">
+                <div class="form-group">
+                    <label>Заголовок</label>
+                    <input type="text" name="title" class="admin-input" required>
+                </div>
+                <div class="form-group">
+                    <label>Содержание</label>
+                    <textarea name="content" rows="5" class="admin-input" required></textarea>
+                </div>
+                <button type="submit" class="admin-btn admin-btn-success">➕ Добавить</button>
+            </form>
         </div>
         
-        <!-- СООБЩЕНИЯ -->
-        <div id="contacts">
-            <h2>✉️ Сообщения</h2>
+        <div class="admin-section">
+            <h2>📰 Список новостей</h2>
+            <div id="newsList" class="items-list"></div>
+        </div>
+    </div>
+    
+    <!-- ============= СООБЩЕНИЯ ============= -->
+    <div id="tab-contacts" class="tab-content">
+        <div class="admin-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; margin-bottom: 20px;">
+                <h2 style="margin: 0;">✉️ Сообщения от пользователей</h2>
+                <a href="/export/contacts" class="export-btn">📊 Экспорт в Excel</a>
+            </div>
             <div class="table-wrapper">
                 <table class="admin-table">
                     <thead>
@@ -320,7 +143,7 @@
                                     </td>
                                     <td>
                                         <form method="POST" action="/admin/contact/delete/<%= contact.id %>" style="display: inline;" onsubmit="return confirm('Удалить сообщение?')">
-                                            <button type="submit" class="admin-btn admin-btn-danger">🗑</button>
+                                            <button type="submit" class="admin-btn admin-btn-danger">🗑 Удалить</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -334,5 +157,257 @@
         </div>
     </div>
 </div>
+
+<style>
+.admin-tabs {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 20px 0;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.tab-btn {
+    background: #967BB6;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.tab-btn.active {
+    background: #7B5EA7;
+    color: white;
+}
+
+.tab-btn:hover {
+    background: #7B5EA7;
+    transform: scale(1.02);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.admin-section {
+    background: white;
+    padding: 25px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.items-list {
+    margin-top: 20px;
+}
+
+.item-card {
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.item-card button {
+    background: #967BB6;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.item-card button:hover {
+    background: #7B5EA7;
+}
+
+.admin-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.admin-btn:hover {
+    transform: scale(1.02);
+}
+
+.admin-btn-danger {
+    background: #967BB6;
+    color: white;
+}
+
+.admin-btn-danger:hover {
+    background: #7B5EA7;
+}
+
+.admin-btn-success {
+    background: #967BB6;
+    color: white;
+}
+
+.admin-btn-success:hover {
+    background: #7B5EA7;
+}
+
+.admin-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.admin-select {
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    min-width: 600px;
+}
+
+.admin-table th {
+    background: #967BB6;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+.admin-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-table tr:hover {
+    background: #f5f5f5;
+}
+
+.paintings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.painting-admin-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+}
+
+.painting-admin-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+.painting-admin-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.painting-admin-card .info {
+    padding: 15px;
+}
+
+/* Стили для кнопки экспорта */
+.export-btn {
+    display: inline-block;
+    background: #967BB6;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: all 0.3s;
+}
+
+.export-btn:hover {
+    background: #7B5EA7;
+    transform: scale(1.02);
+}
+
+@media (max-width: 768px) {
+    .admin-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        width: 100%;
+        text-align: center;
+    }
+    
+    .paintings-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-table th,
+    .admin-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+}
+</style>
+
+<script>
+    // Переключение вкладок
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById(`tab-${btn.dataset.tab}`).classList.add('active');
+        });
+    });
+    
+    // Загрузка новостей
+    async function loadNews() {
+        const res = await fetch('/api/admin/news');
+        const news = await res.json();
+        const container = document.getElementById('newsList');
+        if (container) {
+            container.innerHTML = news.map(item => `
+                <div class="item-card">
+                    <div>
+                        <strong>${item.title}</strong>
+                        <small>${new Date(item.created_at).toLocaleDateString()}</small>
+                    </div>
+                    <button onclick="deleteNews(${item.id})">🗑 Удалить</button>
+                </div>
+            `).join('');
+        }
+    }
+    
+    async function deleteNews(id) {
+        if (confirm('Удалить новость?')) {
+            await fetch(`/api/admin/news/${id}`, { method: 'DELETE' });
+            loadNews();
+        }
+    }
+    
+    loadNews();
+</script>
 
 <%- include('partials/footer') %>

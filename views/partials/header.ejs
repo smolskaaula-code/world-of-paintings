@@ -4,10 +4,214 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title><%= typeof title !== 'undefined' ? title : 'World of Paintings' %></title>
-    <link rel="stylesheet" href="/css/style.css" id="themeStylesheet">
+    
+    <!-- Favicon - только PNG, без ICO -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon2.png?v=3">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon2.png?v=3">
+<link rel="shortcut icon" href="/images/favicon2.png?v=3">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2">
+
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/dark-theme.css" id="darkTheme">
+    <script>
+        // По умолчанию отключаем тёмную тему (светлая тема)
+        document.getElementById('darkTheme').disabled = true;
+        
+        // Проверяем сохранённую тему
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.getElementById('darkTheme').disabled = false;
+        }
+        
+        // Функция переключения темы
+        window.toggleTheme = function() {
+            const darkTheme = document.getElementById('darkTheme');
+            const btn = document.getElementById('themeToggle');
+            if (darkTheme.disabled) {
+                darkTheme.disabled = false;
+                localStorage.setItem('theme', 'dark');
+                btn.textContent = '☀️ Тема';
+            } else {
+                darkTheme.disabled = true;
+                localStorage.setItem('theme', 'light');
+                btn.textContent = '🌙 Тема';
+            }
+        };
+    </script>
+    <style>
+        /* Стили для панели доступности */
+        .vision-panel {
+            background: #24332e;
+            padding: 8px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .vision-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .vision-btn {
+            background: #967BB6;
+            border: none;
+            padding: 6px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+        
+        .vision-btn:hover {
+            background: #7B5EA7;
+            transform: scale(1.02);
+        }
+        
+        .reset-btn {
+            background: #967BB6;
+            color: white;
+        }
+        
+        .reset-btn:hover {
+            background: #7B5EA7;
+        }
+        
+        /* Высокий контраст */
+        body.high-contrast {
+            filter: contrast(1.5);
+        }
+        
+        body.high-contrast,
+        body.high-contrast .painting-card,
+        body.high-contrast .form-container,
+        body.high-contrast .admin-section {
+            background-color: black !important;
+            color: yellow !important;
+        }
+        
+        body.high-contrast a {
+            color: cyan !important;
+        }
+        
+        body.high-contrast button,
+        body.high-contrast .btn-primary {
+            background-color: yellow !important;
+            color: black !important;
+        }
+        
+        /* Черно-белый */
+        body.grayscale {
+            filter: grayscale(100%);
+        }
+        
+        /* Подчеркивание ссылок */
+        body.underline-links a {
+            text-decoration: underline !important;
+        }
+        
+        /* Стили для бургер-меню */
+        .mobile-menu {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+        }
+        
+        .main-nav {
+            margin-top: 20px;
+            border-top: 1px solid #444;
+            padding-top: 15px;
+        }
+        
+        .main-nav .nav-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .main-nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            background: #333;
+            border-radius: 5px;
+            display: inline-block;
+        }
+        
+        /* Кнопка-глаз */
+        .vision-toggle-btn {
+            background: #967BB6;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        
+        .vision-toggle-btn:hover {
+            background: #7B5EA7;
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: block;
+            }
+            
+            .main-nav .nav-links {
+                display: none;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .main-nav .nav-links.active {
+                display: flex;
+            }
+            
+            .main-nav a {
+                display: block;
+                text-align: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .vision-btn {
+                padding: 4px 10px;
+                font-size: 11px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header style="background: #1a1a2e; padding: 15px 0; color: white;">
+    <!-- ПАНЕЛЬ ДЛЯ СЛАБОВИДЯЩИХ (СКРЫТА ПО УМОЛЧАНИЮ) -->
+    <div id="visionPanel" style="display: none;">
+        <div class="vision-panel">
+            <div class="container">
+                <div class="vision-buttons">
+                    <button id="visionIncrease" class="vision-btn">🔍 A+</button>
+                    <button id="visionDecrease" class="vision-btn">🔍 A-</button>
+                    <button id="visionContrast" class="vision-btn">🌓 Контраст</button>
+                    <button id="visionGrayscale" class="vision-btn">⚫ Ч/Б</button>
+                    <button id="visionUnderline" class="vision-btn">🔗 Подчеркнуть</button>
+                    <button id="visionReset" class="vision-btn reset-btn">↺ Сброс</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header style="background: #24332e; padding: 15px 0; color: white;">
         <div class="container">
             <!-- Название сайта и кнопки -->
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
@@ -15,73 +219,193 @@
                     <span style="font-size: 2rem;">🎨</span>
                     <h1 style="margin: 0; font-size: 1.5rem;">World of Paintings</h1>
                 </div>
-                <div style="display: flex; gap: 10px;">
-                    <button id="themeToggle" style="background: #f39c12; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">🌙 Тема</button>
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button id="visionToggleBtn" class="vision-toggle-btn">👁️</button>
+                    <button id="themeToggle" onclick="toggleTheme()" style="background: #967BB6; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">🌙 Тема</button>
                     <% if (user && user.role === 'admin') { %>
-                        <a href="/admin" style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;">⚙️ Админ</a>
+                        <a href="/admin" style="background: #967BB6; color: white; padding: 5px 10px; border-radius: 5px; text-decoration: none;">⚙️ Админ</a>
                     <% } %>
+                    <button class="mobile-menu" id="mobileMenuBtn">☰</button>
                 </div>
             </div>
             
             <!-- МЕНЮ -->
-            <div style="margin-top: 20px; border-top: 1px solid #444; padding-top: 15px;">
-                <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
-                    <a href="/" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Главная</a>
-                    <a href="/gallery" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Галерея</a>
-                    <a href="/paintings" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Картины</a>
-                    <a href="/artists" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Художники</a>
-                    <a href="/forum" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Форум</a>
-                    <a href="/news" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Новости</a>
-                    <a href="/contact" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Контакты</a>
+            <nav class="main-nav">
+                <ul class="nav-links" id="mainNav">
+                    <li><a href="/">Главная</a></li>
+                    <li><a href="/gallery">Галерея</a></li>
+                    <li><a href="/paintings">Картины</a></li>
+                    <li><a href="/artists">Художники</a></li>
+                    <li><a href="/forum">Форум</a></li>
+                    <li><a href="/news">Новости</a></li>
+                    <li><a href="/contact">Контакты</a></li>
                     <% if (user) { %>
-                        <a href="/cabinet" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Кабинет</a>
-                        <a href="/logout" style="color: white; text-decoration: none; padding: 8px 12px; background: #e74c3c; border-radius: 5px;">Выйти</a>
+                        <li><a href="/cabinet">Кабинет</a></li>
+                        <li><a href="/logout">Выйти</a></li>
                     <% } else { %>
-                        <a href="/login" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Вход</a>
-                        <a href="/register" style="color: white; text-decoration: none; padding: 8px 12px; background: #333; border-radius: 5px;">Регистрация</a>
+                        <li><a href="/login">Вход</a></li>
+                        <li><a href="/register">Регистрация</a></li>
                     <% } %>
-                </div>
-            </div>
+                </ul>
+            </nav>
         </div>
     </header>
     <main>
 
 <script>
-    (function() {
-        // Получаем элементы
-        const themeToggle = document.getElementById('themeToggle');
-        let themeStylesheet = document.getElementById('themeStylesheet');
-        
-        // Если нет второй таблицы стилей, создаём её
-        if (!themeStylesheet) {
-            themeStylesheet = document.createElement('link');
-            themeStylesheet.id = 'themeStylesheet';
-            themeStylesheet.rel = 'stylesheet';
-            document.head.appendChild(themeStylesheet);
+    // ============= ОТКРЫТИЕ/ЗАКРЫТИЕ ПАНЕЛИ ДЛЯ СЛАБОВИДЯЩИХ =============
+    const visionToggleBtn = document.getElementById('visionToggleBtn');
+    const visionPanel = document.getElementById('visionPanel');
+    
+    if (visionToggleBtn && visionPanel) {
+        const isVisionOpen = localStorage.getItem('visionPanelOpen') === 'true';
+        if (isVisionOpen) {
+            visionPanel.style.display = 'block';
+            visionToggleBtn.style.background = '#7B5EA7';
         }
         
-        // Загружаем сохранённую тему
-        const savedTheme = localStorage.getItem('theme');
-        
-        if (savedTheme === 'dark') {
-            themeStylesheet.href = '/css/dark-theme.css';
-            themeToggle.textContent = '☀️ Тема';
-        } else {
-            themeStylesheet.href = '/css/style.css';
-            themeToggle.textContent = '🌙 Тема';
-        }
-        
-        // Обработчик переключения
-        themeToggle.addEventListener('click', () => {
-            if (themeStylesheet.href.includes('dark-theme.css')) {
-                themeStylesheet.href = '/css/style.css';
-                themeToggle.textContent = '🌙 Тема';
-                localStorage.setItem('theme', 'light');
+        visionToggleBtn.addEventListener('click', () => {
+            if (visionPanel.style.display === 'none') {
+                visionPanel.style.display = 'block';
+                localStorage.setItem('visionPanelOpen', 'true');
+                visionToggleBtn.style.background = '#7B5EA7';
             } else {
-                themeStylesheet.href = '/css/dark-theme.css';
-                themeToggle.textContent = '☀️ Тема';
-                localStorage.setItem('theme', 'dark');
+                visionPanel.style.display = 'none';
+                localStorage.setItem('visionPanelOpen', 'false');
+                visionToggleBtn.style.background = '#967BB6';
             }
         });
+    }
+    
+    // ============= ПАНЕЛЬ ДЛЯ СЛАБОВИДЯЩИХ =============
+    (function() {
+        let fontSize = parseInt(localStorage.getItem('visionFontSize')) || 100;
+        var isHighContrast = localStorage.getItem('visionContrast') === 'true';
+        var isGrayscale = localStorage.getItem('visionGrayscale') === 'true';
+        var isUnderline = localStorage.getItem('visionUnderline') === 'true';
+        
+        document.body.style.fontSize = fontSize + '%';
+        if (isHighContrast) document.body.classList.add('high-contrast');
+        if (isGrayscale) document.body.classList.add('grayscale');
+        if (isUnderline) document.body.classList.add('underline-links');
+        
+        function setFontSize(size) {
+            fontSize = Math.min(150, Math.max(80, size));
+            document.body.style.fontSize = fontSize + '%';
+            localStorage.setItem('visionFontSize', fontSize);
+        }
+        
+        var incBtn = document.getElementById('visionIncrease');
+        var decBtn = document.getElementById('visionDecrease');
+        var contBtn = document.getElementById('visionContrast');
+        var grayBtn = document.getElementById('visionGrayscale');
+        var underBtn = document.getElementById('visionUnderline');
+        var resetBtn = document.getElementById('visionReset');
+        
+        if (incBtn) incBtn.addEventListener('click', function() { setFontSize(fontSize + 10); });
+        if (decBtn) decBtn.addEventListener('click', function() { setFontSize(fontSize - 10); });
+        
+        if (contBtn) contBtn.addEventListener('click', function() {
+            document.body.classList.toggle('high-contrast');
+            localStorage.setItem('visionContrast', document.body.classList.contains('high-contrast'));
+        });
+        
+        if (grayBtn) grayBtn.addEventListener('click', function() {
+            document.body.classList.toggle('grayscale');
+            localStorage.setItem('visionGrayscale', document.body.classList.contains('grayscale'));
+        });
+        
+        if (underBtn) underBtn.addEventListener('click', function() {
+            document.body.classList.toggle('underline-links');
+            localStorage.setItem('visionUnderline', document.body.classList.contains('underline-links'));
+        });
+        
+        if (resetBtn) resetBtn.addEventListener('click', function() {
+            setFontSize(100);
+            document.body.classList.remove('high-contrast', 'grayscale', 'underline-links');
+            localStorage.removeItem('visionContrast');
+            localStorage.removeItem('visionGrayscale');
+            localStorage.removeItem('visionUnderline');
+        });
+    })();
+    
+    // ============= МОБИЛЬНОЕ МЕНЮ =============
+    var mobileBtn = document.getElementById('mobileMenuBtn');
+    var mainNav = document.getElementById('mainNav');
+
+    function openMenu() {
+        mainNav.classList.add('active');
+        var overlay = document.querySelector('.menu-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'menu-overlay';
+            document.body.appendChild(overlay);
+            overlay.addEventListener('click', closeMenu);
+        }
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMenu() {
+        mainNav.classList.remove('active');
+        var overlay = document.querySelector('.menu-overlay');
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    if (mobileBtn && mainNav) {
+        mobileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            openMenu();
+        });
+    }
+
+    // Закрываем меню при клике на ссылку
+    var links = document.querySelectorAll('#mainNav a');
+    for (var i = 0; i < links.length; i++) {
+        links[i].addEventListener('click', closeMenu);
+    }
+</script>
+
+<!-- ========== УВЕДОМЛЕНИЕ О COOKIES ========== -->
+<div id="cookieConsent" style="position: fixed; bottom: 0; left: 0; right: 0; background: #1a1a2e; color: white; padding: 20px; z-index: 9999; box-shadow: 0 -2px 10px rgba(0,0,0,0.2); display: none;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+        <div style="flex: 1;">
+            <strong>🍪 Мы используем cookies</strong>
+            <p style="margin: 5px 0 0; font-size: 14px;">Этот сайт использует cookies для улучшения работы, аналитики и персонализации. Продолжая использовать сайт, вы соглашаетесь с нашей <a href="/privacy" style="color: #f39c12;">Политикой конфиденциальности</a>.</p>
+        </div>
+        <div style="display: flex; gap: 10px;">
+            <button id="acceptCookies" style="background: #f39c12; color: #1a1a2e; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;">Принять</button>
+            <button id="declineCookies" style="background: #e74c3c; color: white; border: none; padding: 8px 20px; border-radius: 5px; cursor: pointer;">Отклонить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function() {
+        var cookieConsent = localStorage.getItem('cookieConsent');
+        var cookieBanner = document.getElementById('cookieConsent');
+        if (!cookieConsent && cookieBanner) cookieBanner.style.display = 'block';
+        
+        var acceptBtn = document.getElementById('acceptCookies');
+        var declineBtn = document.getElementById('declineCookies');
+        
+        if (acceptBtn) {
+            acceptBtn.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'accepted');
+                if (cookieBanner) cookieBanner.style.display = 'none';
+            });
+        }
+        
+        if (declineBtn) {
+            declineBtn.addEventListener('click', function() {
+                localStorage.setItem('cookieConsent', 'declined');
+                if (cookieBanner) cookieBanner.style.display = 'none';
+            });
+        }
     })();
 </script>
+
+</body>
+</html>

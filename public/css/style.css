@@ -8,7 +8,7 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f9f9f9;
+    background-color: #d1d8cf;
 }
 
 /* Шапка сайта */
@@ -38,7 +38,7 @@ header {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #f39c12;
+    background: #967BB6;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -64,7 +64,7 @@ nav a {
 }
 
 nav a:hover {
-    color: #f39c12;
+    color: #7B5EA7;
 }
 
 /* Мобильное меню */
@@ -108,8 +108,8 @@ nav a:hover {
 /* Кнопки */
 .btn-primary {
     display: inline-block;
-    background: #f39c12;
-    color: #1a1a2e;
+    background: #967BB6;
+    color: white;
     padding: 12px 30px;
     border-radius: 5px;
     text-decoration: none;
@@ -120,12 +120,12 @@ nav a:hover {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    background: #e67e22;
+    background: #7B5EA7;
 }
 
 .btn-small {
     display: inline-block;
-    background: #3498db;
+    background: #967BB6;
     color: white;
     padding: 5px 15px;
     border-radius: 5px;
@@ -135,7 +135,7 @@ nav a:hover {
 }
 
 .btn-small:hover {
-    background: #2980b9;
+    background: #7B5EA7;
     transform: translateY(-1px);
 }
 
@@ -253,14 +253,14 @@ nav a:hover {
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
-    border-color: #f39c12;
+    border-color: #967BB6;
     outline: none;
-    box-shadow: 0 0 5px rgba(243,156,18,0.3);
+    box-shadow: 0 0 5px rgba(150, 123, 182, 0.3);
 }
 
 button {
-    background: #f39c12;
-    color: #1a1a2e;
+    background: #967BB6;
+    color: white;
     padding: 10px 20px;
     border: none;
     border-radius: 5px;
@@ -271,7 +271,7 @@ button {
 }
 
 button:hover {
-    background: #e67e22;
+    background: #7B5EA7;
     transform: translateY(-2px);
 }
 
@@ -309,7 +309,7 @@ footer {
 
 .footer-section h3 {
     margin-bottom: 1rem;
-    color: #f39c12;
+    color: #967BB6;
 }
 
 .footer-section ul {
@@ -323,7 +323,7 @@ footer {
 }
 
 .footer-section a:hover {
-    color: #f39c12;
+    color: #7B5EA7;
 }
 
 .footer-bottom {
@@ -366,6 +366,7 @@ footer {
         display: block;
     }
     
+    /* Стили для выезжающего меню на телефонах */
     nav {
         position: fixed;
         top: 0;
@@ -403,9 +404,25 @@ footer {
     }
     
     nav a:hover {
-        background: #f39c12;
+        background: #967BB6;
         color: #1a1a2e;
         padding-left: 30px;
+    }
+    
+    /* Затемнение фона */
+    .menu-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        z-index: 999;
+        display: none;
+    }
+    
+    .menu-overlay.active {
+        display: block;
     }
     
     .hero {
@@ -421,7 +438,7 @@ footer {
         gap: 1rem;
     }
     
-    /* ФИКС ДЛЯ КАРТИНОК НА ТЕЛЕФОНЕ - ОСНОВНОЕ ИСПРАВЛЕНИЕ */
+    /* ФИКС ДЛЯ КАРТИНОК НА ТЕЛЕФОНЕ */
     .painting-card img {
         width: 100% !important;
         height: auto !important;
@@ -467,5 +484,54 @@ footer {
     .container h2 {
         font-size: 1.2rem;
         text-align: center;
+    }
+}
+
+/* ========== СТИЛИ ДЛЯ МОБИЛЬНОГО МЕНЮ ========== */
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    display: none;
+}
+
+.menu-overlay.active {
+    display: block;
+}
+
+/* Убедимся, что меню поверх оверлея */
+.main-nav {
+    position: relative;
+    z-index: 1000;
+}
+
+/* Стили для активного меню на мобильных */
+@media (max-width: 768px) {
+    .main-nav .nav-links.active {
+        display: flex !important;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 280px;
+        height: 100%;
+        background: #1a1a2e;
+        z-index: 1001;
+        padding: 60px 20px 20px;
+        margin: 0;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+    
+    .main-nav .nav-links.active li {
+        width: 100%;
+    }
+    
+    .main-nav .nav-links.active a {
+        display: block;
+        text-align: left;
+        padding: 12px 15px;
     }
 }

@@ -1,0 +1,261 @@
+<%- include('partials/header') %>
+
+<main>
+    <div class="container">
+        <div class="privacy-container">
+            <h1 class="privacy-title">🔒 Политика конфиденциальности</h1>
+            <p class="privacy-date">Последнее обновление: 14.04.2026</p>
+            
+            <div class="privacy-content">
+                <div class="privacy-section">
+                    <h2>1. Сбор персональных данных</h2>
+                    <p>При регистрации на сайте «World of Paintings» мы собираем следующие данные:</p>
+                    <ul>
+                        <li>Имя пользователя</li>
+                        <li>Адрес электронной почты</li>
+                        <li>Пароль (в зашифрованном виде)</li>
+                        <li>Дополнительная информация (страна, год рождения, биография) — по желанию</li>
+                    </ul>
+                </div>
+                
+                <div class="privacy-section">
+                    <h2>2. Использование cookies</h2>
+                    <p>Наш сайт использует файлы cookies для:</p>
+                    <ul>
+                        <li>Сохранения настроек темы (светлая/тёмная)</li>
+                        <li>Авторизации пользователя (сессии)</li>
+                        <li>Аналитики и улучшения работы сайта</li>
+                    </ul>
+                </div>
+                
+                <div class="privacy-section">
+                    <h2>3. Цели обработки данных</h2>
+                    <ul>
+                        <li>Обеспечение работы сайта (регистрация, вход, добавление картин)</li>
+                        <li>Улучшение пользовательского опыта</li>
+                        <li>Связь с пользователями (обратная связь)</li>
+                    </ul>
+                </div>
+                
+                <div class="privacy-section">
+                    <h2>4. Передача данных третьим лицам</h2>
+                    <p>Мы не передаём ваши персональные данные третьим лицам, за исключением случаев, предусмотренных законодательством.</p>
+                </div>
+                
+                <div class="privacy-section">
+                    <h2>5. Ваши права</h2>
+                    <p>Вы имеете право:</p>
+                    <ul>
+                        <li>Запросить копию ваших данных</li>
+                        <li>Изменить или удалить свои данные</li>
+                        <li>Отозвать согласие на обработку данных</li>
+                    </ul>
+                </div>
+                
+                <div class="privacy-section">
+                    <h2>6. Контакты</h2>
+                    <p>По всем вопросам, связанным с обработкой персональных данных, вы можете связаться с нами:</p>
+                    <ul style="list-style: none; padding-left: 0;">
+                        <li>📧 Email: <a href="mailto:smolskaaula@gmail.com" class="privacy-email">smolskaaula@gmail.com</a></li>
+                        <li>📞 Телефон: <a href="tel:+375255107262" class="privacy-phone">+375 (25) 510-72-62</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style>
+    .privacy-container {
+        max-width: 900px;
+        margin: 40px auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+    }
+    
+    .privacy-title {
+        background: #24332e;
+        color: white;
+        font-size: 2rem;
+        text-align: center;
+        padding: 40px 20px;
+        margin: 0;
+        font-family: 'Playfair Display', serif;
+    }
+    
+    .privacy-date {
+        text-align: center;
+        color: #7f8c8d;
+        padding: 15px;
+        margin: 0;
+        background: #f8f9fa;
+        font-size: 14px;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    
+    .privacy-content {
+        padding: 40px;
+    }
+    
+    .privacy-section {
+        margin-bottom: 35px;
+    }
+    
+    .privacy-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .privacy-section h2 {
+        color: #2c3e50;
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        padding-bottom: 8px;
+        border-bottom: 3px solid #967BB6;
+        display: inline-block;
+    }
+    
+    .privacy-section p {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 12px;
+    }
+    
+    .privacy-section ul {
+        margin-left: 25px;
+        margin-top: 10px;
+        margin-bottom: 15px;
+    }
+    
+    .privacy-section li {
+        color: #555;
+        line-height: 1.7;
+        margin-bottom: 8px;
+    }
+    
+    .privacy-email, .privacy-phone {
+        color: #967BB6;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+    
+    .privacy-email:hover, .privacy-phone:hover {
+        color: #7B5EA7;
+        text-decoration: underline;
+    }
+    
+    .privacy-footer {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-top: 1px solid #ecf0f1;
+        color: #95a5a6;
+        font-size: 14px;
+    }
+    
+    /* Тёмная тема */
+    body.dark .privacy-container {
+        background: #1e1e1e;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    }
+    
+    body.dark .privacy-title {
+        background: #24332e;
+    }
+    
+    body.dark .privacy-date {
+        background: #2a2a2a;
+        color: #aaa;
+        border-bottom-color: #333;
+    }
+    
+    body.dark .privacy-section h2 {
+        color: #967BB6;
+        border-bottom-color: #967BB6;
+    }
+    
+    body.dark .privacy-section p,
+    body.dark .privacy-section li {
+        color: #ccc;
+    }
+    
+    body.dark .privacy-email, body.dark .privacy-phone {
+        color: #967BB6;
+    }
+    
+    body.dark .privacy-email:hover, body.dark .privacy-phone:hover {
+        color: #7B5EA7;
+    }
+    
+    body.dark .privacy-footer {
+        background: #2a2a2a;
+        border-top-color: #333;
+        color: #777;
+    }
+    
+    /* Адаптивность для телефонов */
+    @media (max-width: 768px) {
+        .privacy-container {
+            margin: 20px 15px;
+            border-radius: 15px;
+        }
+        
+        .privacy-title {
+            font-size: 1.5rem;
+            padding: 25px 15px;
+        }
+        
+        .privacy-content {
+            padding: 25px 20px;
+        }
+        
+        .privacy-section h2 {
+            font-size: 1.2rem;
+        }
+        
+        .privacy-section p,
+        .privacy-section li {
+            font-size: 14px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .privacy-content {
+            padding: 20px 15px;
+        }
+        
+        .privacy-title {
+            font-size: 1.3rem;
+        }
+    }
+</style>
+
+<script>
+    // Поддержка тёмной темы для этой страницы
+    (function() {
+        const darkTheme = document.getElementById('darkTheme');
+        if (darkTheme && !darkTheme.disabled) {
+            document.body.classList.add('dark');
+        }
+        
+        // Следим за изменениями темы
+        const observer = new MutationObserver(function() {
+            const darkThemeElem = document.getElementById('darkTheme');
+            if (darkThemeElem && !darkThemeElem.disabled) {
+                document.body.classList.add('dark');
+            } else {
+                document.body.classList.remove('dark');
+            }
+        });
+        
+        const darkThemeElem = document.getElementById('darkTheme');
+        if (darkThemeElem) {
+            observer.observe(darkThemeElem, { attributes: true, attributeFilter: ['disabled'] });
+        }
+    })();
+</script>
+
+<%- include('partials/footer') %>
